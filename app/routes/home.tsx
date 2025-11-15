@@ -119,11 +119,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <header className="space-y-4 rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm shadow-slate-100 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-black/20">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-500">Elektri arveldusmootor</p>
           <h1 className="text-4xl font-semibold leading-tight text-slate-900 dark:text-white">
-            Elektri Arveldusmootor
+            Elektri Arveldusmootor  
           </h1>
           <p className="max-w-3xl text-lg text-slate-600 dark:text-slate-300">
-            Platvorm kogub Eleringi API-st energiaturu andmeid, võrdleb CSV arveid, kasutab masinõpet mustrite ja
-            kõrvalekallete leidmiseks ning koostab visuaalsed raportid omanikule või haldurile.
+            Võrdle oma elektritarbimist Eleringi turuhinnaga. Saad kuvada reaalajas hinnakõver, kõrvalekalded ja efektiivsuse hinnanguid.
           </p>
           <div className="text-xs uppercase text-slate-400 dark:text-slate-500">
             Andmed lähtestatud {new Date(generatedAt).toLocaleString("et-EE")}

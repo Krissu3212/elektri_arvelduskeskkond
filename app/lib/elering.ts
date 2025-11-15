@@ -26,8 +26,7 @@ export async function fetchNordPoolPrices(
   hoursBack = 48,
 ): Promise<EnergyPricePoint[]> {
   const now = new Date();
-  const from = subHours(now, hoursBack);
-  const params = new URLSearchParams({
+  const from = subHours(now, hoursBack);  const params = new URLSearchParams({
     start: formatISO9075(from),
     end: formatISO9075(now),
     regions: regions.join(","),
