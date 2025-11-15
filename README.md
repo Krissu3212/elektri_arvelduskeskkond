@@ -18,6 +18,15 @@ npm run dev
 # http://localhost:5173
 ```
 
+### Keskkonnamuutujad
+
+1. Kopeeri juurkausta fail `.env` (fail on `.gitignore` all).
+2. Lisa oma OpenAI võti:\
+   `OPENAI_API_KEY=sk-...`
+3. Vajadusel lisa teised serveripoolsed võtmed samasse faili.
+
+`app/lib/env.server.ts` laeb `.env` automaatselt nii `npm run dev` kui ka `npm start` käivitamisel, seega võtmed on saadaval loaderitele ja API-dele.
+
 ### Tootmise build
 
 ```bash

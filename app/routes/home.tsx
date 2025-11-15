@@ -18,12 +18,16 @@ import { PatternPanel } from "../components/pattern-panel";
 import { ReportPreviewCard } from "../components/report-preview";
 import { ReportScheduleForm } from "../components/report-schedule-form";
 import { IntegrationPanel } from "../components/integration-panel";
+import { IndicatorChartCard } from "../components/indicator-chart";
+import { generateConsumptionInsights } from "../lib/ai.server";
 
 export async function loader() {
   const priceSeries = await fetchNordPoolPrices(["ee"], 48);
+  const aiRecommendations = await generateConsumptionInsights(priceSeries);
   return {
     priceSeries,
     generatedAt: new Date().toISOString(),
+    aiRecommendations,
   };
 }
 
@@ -39,7 +43,7 @@ export function meta() {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { priceSeries, generatedAt } = loaderData;
+  const { priceSeries, generatedAt, aiRecommendations } = loaderData;
   const [comparisons, setComparisons] = useState<InvoiceComparison[]>([]);
 
   const latestPoint = priceSeries.at(-1);
@@ -165,11 +169,32 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
+          <IndicatorChartCard
+            title="Taastuvenergia tootmine"
+            subtitle="Elering KE21 · kuu keskmine tootmine"
+            sourceFile="/KE21_20251115-190001.csv"
+            description="Hüdro-, tuule- ja päikeseenergia tootmine ning nende kõrvalekalded kuu kaupa."
+            unit="GWh"
+          />
+          <IndicatorChartCard
+            title="Elektri import ja eksport"
+            subtitle="Elering KE21 · elektrikaubandus"
+            sourceFile="/KE21_20251115-204342.csv"
+            description="Võrdleb impordi ja ekspordi mahte ning märgib bilansi anomaaliad."
+            unit="GWh"
+          />
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2">
           <InvoiceUpload marketSeries={priceSeries} onComparison={(rows) => setComparisons(rows)} />
           <ComparisonTable rows={comparisons} />
         </section>
 
-        <PatternPanel insights={insights} efficiency={efficiency} />
+        <PatternPanel
+          insights={insights}
+          efficiency={efficiency}
+          aiInsights={aiRecommendations}
+        />
 
         <section className="grid gap-6 lg:grid-cols-2">
           <ReportPreviewCard report={report} />

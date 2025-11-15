@@ -60,3 +60,29 @@ export interface ReportPreview {
   }[];
 }
 
+export interface IndicatorPoint {
+  period: string;
+  value: number;
+}
+
+export interface IndicatorSeries {
+  key: string;
+  label: string;
+  unit?: string;
+  points: IndicatorPoint[];
+}
+
+export interface IndicatorAnomaly extends IndicatorPoint {
+  zScore: number;
+  severity: "low" | "medium" | "high";
+  direction: "up" | "down";
+}
+
+export interface AiRecommendation {
+  summary: string;
+  opportunities: string[];
+  cautions: string[];
+  actions: string[];
+  generatedAt: string;
+}
+

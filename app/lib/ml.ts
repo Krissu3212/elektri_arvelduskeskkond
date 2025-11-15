@@ -2,6 +2,8 @@ import type {
   AnomalyPoint,
   EfficiencyInsight,
   EnergyPricePoint,
+  IndicatorAnomaly,
+  IndicatorPoint,
   PatternInsight,
 } from "./types";
 
@@ -144,5 +146,34 @@ export function calculateEfficiency(series: EnergyPricePoint[]): EfficiencyInsig
 export function smoothSeries(series: EnergyPricePoint[]): number[] {
   const values = series.map((point) => point.price);
   return rollingAverage(values, 4);
+}
+
+export function detectIndicatorAnomalies(
+  points: IndicatorPoint[],
+): IndicatorAnomaly[] {
+  if (points.length === 0) return [];
+
+  const values = points.map((point) => point.value);
+  const mean = values.reduce((acc, value) => acc + value, 0) / values.length;
+  const std = standardDeviation(values, mean) || 1;
+
+  return points
+    .map((point) => {
+      const zScore = (point.value - mean) / std;
+      const severity =
+        Math.abs(zScore) > 2.2
+          ? "high"
+          : Math.abs(zScore) > 1.6
+            ? "medium"
+            : "low";
+
+      return {
+        ...point,
+        zScore,
+        severity,
+        direction: zScore >= 0 ? "up" : "down",
+      } satisfies IndicatorAnomaly;
+    })
+    .filter((point) => Math.abs(point.zScore) > 1.2);
 }
 
